@@ -1,4 +1,4 @@
-# Ignore the following directories [`\` to escape spaces]
+# Ignore the following directories {`\` to escape `[` chars}
 \[01]\ Books/
 \[02]\ Projects/
 \[03]\ Ideas/
