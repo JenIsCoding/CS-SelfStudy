@@ -1,0 +1,2 @@
+# Exercises source 
+These exercises are taken from the [Pointers section exercises](https://erlerobotics.gitbooks.io/erle-robotics-cpp-gitbook/content/pointers/exercises_pointers.html) of the book [Erle Robotics: C++ Gitbook](https://erlerobotics.gitbooks.io/erle-robotics-cpp-gitbook/content/pointers/exercises_pointers.html).

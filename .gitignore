@@ -1,0 +1,10 @@
+# Ignore the following directories [`\` to escape spaces]
+\[01]\ Books/
+\[02]\ Projects/
+\[03]\ Ideas/
+OtherFiles/
+Reacts/
+IntroToAlgorithms/
+
+# Ignore all .exe files
+*.exe
