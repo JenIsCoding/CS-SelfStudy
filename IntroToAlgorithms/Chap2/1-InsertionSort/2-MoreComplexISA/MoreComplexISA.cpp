@@ -4,10 +4,10 @@
 #include <ctime>   // for time()
 using namespace std;
 
-// Struct definition to create a "real" card made of:
-// - Card face
-// - Card value
-// - Card suit
+// With this `struct`, I create a card, made like this:
+// - card face, e.g. "J" or "1" or "K"
+// - card value, e.g. 8 or 9 or 11 for a "Q" card
+// - card suit, e.g. spades or clubs
 	struct Card{
 		string cardFace;
     	int cardValue;
@@ -22,22 +22,35 @@ int rndmNumGen(int par){
 
 // Random card array generator
 void rndmCardArrGen(string arrStr[], int arrInt[], string arrType[], Card rndmCardArray[], int N){
-	
+// inputs explanation:
+// - arrStr --> corresponds to "cardsListFaces"
+// - arrInt --> corresponds to "cardsListValues"
+// - arrType --> corresponds to "cardsListSuits"
+// - Card --> corresponds to "getCards", a new card deck that is generated here randomly
+// - N --> corresponds to "numWantedCards"
+
 	int getCardValueInd, getCardSuitInd;
 	
 	for(int i = 0; i < N; i++){
-		getCardValueInd = rndmNumGen(13); //generate a random number for card value
-		getCardSuitInd = rndmNumGen(4); //generate a random number for card suit
-		// Assign the generated numbers to cards
+		// Generate a random number from 0 to 12 for the card value 
+		// e.g. if I got 0 as a generated random number, it will be used as index for the cardsListValues[0] = 1
+		getCardValueInd = rndmNumGen(13);
+		// Generate a random number from 0 to 3 for the card suit
+		// e.g. if I got 0 as a generated random number, it will be used as index for the cardsListSuits[0] = "C" 
+		getCardSuitInd = rndmNumGen(4);
+		
+		// Assign the generated numbers to card using the for cycle
 		rndmCardArray[i].cardFace = arrStr[getCardValueInd];
 		rndmCardArray[i].cardValue = arrInt[getCardValueInd];
 		rndmCardArray[i].cardSuit =  arrType[getCardSuitInd];
 		
-		// Check for duplicates
+		// Important step: check for duplicates
+		// I want to avoid to have two cards with the same value and suit (e.g.: two 6 of clubs)
 		for(int g = i - 1; g >= 0; g--){
+			// The while cycle compares the currently generated cardFace and carsSuit 
+			// with all the card faces and suits previously generated for the other cards
 			while (rndmCardArray[g].cardFace == rndmCardArray[i].cardFace && 
                    rndmCardArray[g].cardSuit == rndmCardArray[i].cardSuit){
-//				   cout << "Duplicate found!" << endl;
 				   // If a duplicate is found, it generates a new random number for suit only
 				   getCardSuitInd = rndmNumGen(4);
 				   rndmCardArray[i].cardSuit =  arrType[getCardSuitInd];
@@ -49,7 +62,8 @@ void rndmCardArrGen(string arrStr[], int arrInt[], string arrType[], Card rndmCa
 }
 
 
-// Get indexes of the 4 suits families; they will be checked in this order: "p", "f", "q", "c"
+// Get indexes of the 4 suits families; they will be checked in the order give by the `cardsListSuits` array
+// "p", "f", "q", "c" (Italian version) or "C", "D", "H", "S" (English version)
 void getSuitsIndexes(Card rndmCardArray[], int N, string arrSuits[], int M, int arrIndex[], int countSuits[]){
 	int k = 0;
 	
@@ -67,9 +81,10 @@ void getSuitsIndexes(Card rndmCardArray[], int N, string arrSuits[], int M, int 
 
 }
 
-// Get cards by suits (not ordered yet) using the `arrIndex` array get previously
+// Get cards sorted by suits only (not in ascending order yet) using the `arrIndex` array got previously through the `getSuitsIndexes` procedure
 void sortCardsBySuits(Card rndmCardArray[], int N, int arrIndex[], Card copyCard[]){
 	
+	// the cards are sorted in the order given by the values that are stored in the `arrIndex` array
 	for(int k = 0; k < N ; k++){
 		copyCard[k].cardFace = rndmCardArray[arrIndex[k]].cardFace;
 		copyCard[k].cardValue = rndmCardArray[arrIndex[k]].cardValue;
@@ -77,7 +92,9 @@ void sortCardsBySuits(Card rndmCardArray[], int N, int arrIndex[], Card copyCard
 	}
 }
 
-// Get start index
+// -------------------------- PROCEDURE TO SORT CARDS BY ASCENDING VALUES -------------------------- 
+
+// Get start index for the second loop of `insertionSort` procedure
 int getStartIndex(int arr[], int N, int index){
 	int startInd = 0; 
 	
@@ -90,7 +107,7 @@ int getStartIndex(int arr[], int N, int index){
 	return startInd;
 }
 
-// Get end index
+// Get end index for the second loop of `insertionSort` procedure
 int getEndIndex(int arr[], int N, int index){
 	int endInd = arr[0]; 
 	
@@ -129,6 +146,8 @@ void insertionSort(Card givenDeck[], int N, int numSuits, int countSuits[]){
 		
 }
 
+// -------------------------- PROCEDURES TO SHOW CARDS OR ARRAYS -------------------------- 
+
 // Procedure to show the array elements
 void showArray(int arr[], int n){
 	for(int i = 0; i < n; i++){
@@ -146,20 +165,9 @@ void showStructEl(Card cards[], int n){
     cout << endl;
 }
 
-//// Procedure to sort the array through the `Insertion Sort` algorithm
-//void insertionSort(int arr[], int n){
-//	for(int i = 0; i < n; i++){
-//		int key = arr[i];
-//        int j = i - 1;
-//        
-//        while(j >= 0 && arr[j] > key){
-//            arr[j+1] = arr[j];
-//            j = j - 1;
-//        }
-//        
-//        arr[j+1] = key;
-//    }
-//}
+
+// ----------------------------------- MAIN PART ------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------
 
 int main(){
 	
@@ -174,7 +182,7 @@ int main(){
 	// List of cards value
 	int cardsListValues[numTotCards] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 	// List of suits [italian]
-	string cardsListSuits[numSuits]= {"C", "D", "H", "S"};//{"p", "f", "q", "c"};//
+	string cardsListSuits[numSuits] = {"C", "D", "H", "S"};//{"p", "f", "q", "c"};//
 	
 	// new Card instance definition, based on `numWantedCards`
 	Card getCards[numWantedCards];
@@ -182,13 +190,15 @@ int main(){
 	// Generate a random `numWantedCards` deck of nCards 
 	rndmCardArrGen(cardsListFaces, cardsListValues, cardsListSuits, getCards, numWantedCards);
 	
-	// Show the generated cards elements
+	// Show suits legend to user
 	cout << "Suits legend: " << endl;
 	cout << "C = Clubs" << endl;
 	cout << "D = Diamonds" << endl;
 	cout << "H = Hearts" << endl;
 	cout << "S = Spades" << endl;
 	cout << endl;
+	
+	// Show the generated cards elements
 	cout << "These are the cards generated randomly: " << endl;
 	showStructEl(getCards, numWantedCards);
 	
